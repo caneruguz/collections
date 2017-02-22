@@ -15,13 +15,21 @@
                 {{else}}
                     <button class="btn btn-info" {{action 'toggleOrganizeMode'}}>Organize Items </button>
                 {{/if}}
+                <button type="button" class="btn btn-default" {{action toggleProperty 'tableView'}}>
+                  {{if tableView 'Card' 'Table'}}
+                </button>
             </div>
         </div>
         <div class="row">
             {{#if list}}
+            {{#if tableView}}
+                {{collection-item-table items=list}}
+            {{else}}
                 {{#each list as |item|}}
                     {{collection-item item=item toggleSelectedList=(action 'toggleSelectedList') organizeMode=organizeMode class="col-sm-6 col-lg-4"}}
                 {{/each}}
+            {{/if}}
+
             {{else}}
                 <p class="text-center text-muted p-xl"> You do not have any items yet. You can add more using the form above.</p>
             {{/if}}

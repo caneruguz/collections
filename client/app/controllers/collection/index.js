@@ -14,6 +14,7 @@ export default Ember.Controller.extend({
       });
       return groups;
     }),
+    tableView: false,
     list: Ember.computed.union('groups', 'model.items'),
     actions: {
         toggleOrganizeMode () {

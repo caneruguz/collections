@@ -1,0 +1,28 @@
+<table class="table table-bordered m-t-md">
+    <thead>
+        <tr>
+            <th>Title </th>
+            <th>Type</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each items as |item|}}
+            <tr>
+                <td>
+                    {{#if (eq item.type 'group')}}
+                        <h4>{{#link-to 'collection.group' item.id}}{{item.title}}{{/link-to}}</h4>
+                    {{else if (eq parent 'group')}}
+                        <h4>{{#link-to 'collection.group.item' item.id}}{{item.title}}{{/link-to}}</h4>
+                    {{else}}
+                        <h4>{{#link-to 'collection.item' item.id}}{{item.title}}{{/link-to}}</h4>
+                    {{/if}}
+                </td>
+                <td>{{item.type}}</td>
+                <td>
+                    {{#if item.status}}{{item.status}}{{/if}}
+                </td>
+            </tr>
+        {{/each}}
+    </tbody>
+</table>
