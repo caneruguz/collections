@@ -15,6 +15,7 @@ client/coverage/*
 client/libpeerconnection.log
 client/npm-debug.log
 client/testem.log
+.idea
 
 .python-version
 *.pyc

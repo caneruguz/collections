@@ -16,7 +16,27 @@
                             {{add-node model=model type=type transition=(action "transition")}}
                         {{/if}}
                         {{#if (eq addMethod 'create')}}
-                            <div class="p-lg">This section is a placeholder for components that add their project types; i.e. "Add Preprint" </div>
+                            {{preprint-form-author
+                                contributors=contributors
+                                parentContributors=parentContributors
+                                node=node
+                                isAdmin='true'
+                                canEdit='true'
+                                currentUser=user
+                                addContributor=(action 'addContributor')
+                                addContributors=(action 'addContributors')
+                                findContributors=(action 'findContributors')
+                                searchResults=searchResults
+                                removeContributor=(action 'removeContributor')
+                                editContributor=(action 'updateContributor')
+                                reorderContributors=(action 'reorderContributors')
+                                highlightSuccessOrFailure=(action 'highlightSuccessOrFailure')
+                                parentNode=null
+                                editMode='Submit'
+                              }}
+
+
+                          <div class="p-lg">This section is a placeholder for components that add their project types; i.e. "Add Preprint" </div>
                         {{/if}}
                 {{else}}
                     <div class="row">
