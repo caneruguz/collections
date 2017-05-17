@@ -28,6 +28,18 @@ const BasicsValidations = buildValidations({
     }
 });
 
+function doiRegexExec(doi) {
+    //Strips url out of inputted doi, if any.  For example, user input this DOI: https://dx.doi.org/10.12345/hello. Returns 10.12345/hello.
+    // If doi invalid, returns doi.
+    const doiRegex = /\b(10\.\d{4,}(?:\.\d+)*\/\S+(?:(?!["&\'<>])\S))\b/;
+    if (doi) {
+        const doiOnly = doiRegex.exec(doi);
+        return doiOnly !== null ? doiOnly[0] : doi;
+    }
+    return doi;
+
+}
+
 
 export default Ember.Component.extend(BasicsValidations, {
     uploadValid: Ember.computed.alias('nodeLocked'), // Once the node has been locked (happens in step one of upload section), users are free to navigate through form unrestricted
