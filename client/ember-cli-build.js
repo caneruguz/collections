@@ -4,7 +4,11 @@ var EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
 module.exports = function(defaults) {
   var app = new EmberApp(defaults, {
-    // Add options here
+    //   sassOptions: {
+    //       includePaths: [
+    //           'node_modules/ember-osf/addon/styles'
+    //       ]
+    //   }
   });
 
   // Use `app.import` to add additional libraries to the generated
@@ -26,6 +30,10 @@ module.exports = function(defaults) {
     app.import('bower_components/osf-style/css/base.css');
     app.import('bower_components/loaders.css/loaders.min.css');
     app.import('bower_components/hint.css/hint.min.css');
+    app.import('bower_components/jquery.tagsinput/src/jquery.tagsinput.js');
+
+    app.import('vendor/assets/ember-osf.css');
+
 
   return app.toTree();
 };

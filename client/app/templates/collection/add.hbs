@@ -19,6 +19,9 @@
                             <div class="p-lg">This section is a placeholder for components that add their project types; i.e. "Add Preprint" </div>
                         {{/if}}
                 {{else}}
+
+
+
                     <div class="row">
                         <div class="col-xs-6">
                             <div class="p-md add-select-method" {{action 'updateProperty' 'addMethod' 'create'}}> Create a new {{model.settings.collectionType}} </div>
@@ -29,6 +32,8 @@
                     </div>
                 {{/if}}
             {{/if}}
+
+            {{preprint-basics}}
         </div>
     </div>
 </div>
