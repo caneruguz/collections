@@ -7,7 +7,16 @@ export default Ember.Component.extend({
 
     actions: {
         pressButton() {
-            this.attrs.action();
+            try {
+                debugger;
+                let result = this.attrs.action();
+                this.attrs.saveParamter({
+                    value: result,
+                    state: ['defined']
+                });
+            } catch(ex) {
+                alert(ex);
+            }
         }
     }
 

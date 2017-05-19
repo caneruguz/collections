@@ -27,7 +27,7 @@ export default Ember.Route.extend({
                 'authors',
                 'submit'
             ],
-            initial_state: {
+            initial_parameters: {
                 upload_section: {
                     state: ['unsaved', 'editing'],
                     value: undefined
@@ -65,15 +65,27 @@ export default Ember.Route.extend({
                     value: undefined
                 }
             },
+            initial_widgets: [],
             actions: [{
-                type: 'create_widget',
+                id: '5db3456b-cef7-4c87-bb60-16a04ee89bad',
+                type: 'upload_file',
                 parameters: {
+                    file_data: 'preprint_file_data',
+                    file_name: 'preprint_file_name',
+                    node: 'preprint_node'
+                },
+                output_parameter: 'file_url',
+            }, {
+                type: 'create_widget',
+                args: {
                     widget_component: 'file-uploader',
                     description: 'Choose the preprint file to upload',
                     section: 'upload',
-                    output: 'preprint_file_data'
                 },
-                output: 'preprint_file_upload_widget',
+                parameters: {
+                    output_parameter: 'preprint_file_data'
+                },
+                output_parameter: 'preprint_file_upload_widget',
                 conditions: [{
                     all: [{
                         parameter: 'upload_section',
@@ -85,13 +97,13 @@ export default Ember.Route.extend({
                 }]
             }, {
                 type: 'create_widget',
-                parameters: {
+                args: {
                     widget_component: 'text-field',
                     description: 'Enter the title for this preprint',
                     section: 'upload',
-                    output: 'preprint_file_name'
+                    output_parameter: 'preprint_file_name'
                 },
-                output: 'preprint_title_widget',
+                output_parameter: 'preprint_title_widget',
                 conditions: [{
                     all: [{
                         parameter: 'preprint_title_widget',
@@ -106,13 +118,14 @@ export default Ember.Route.extend({
                 }]
             }, {
                 type: 'create_widget',
-                parameters: {
+                args: {
                     widget_component: 'button-widget',
                     description: 'Save this section',
                     section: 'upload',
-                    output: 'upload_section'
+                    output_parameter: 'upload_section',
+                    action_id: '5db3456b-cef7-4c87-bb60-16a04ee89bad'
                 },
-                output: 'save_upload_section_widget',
+                output_parameter: 'save_upload_section_widget',
                 conditions: [{
                     all: [{
                         parameter: 'save_upload_section_widget',
@@ -130,13 +143,13 @@ export default Ember.Route.extend({
                 }]
             }, {
                 type: 'create_widget',
-                parameters: {
+                args: {
                     widget_component: 'subject-picker',
                     description: 'Save this section',
                     section: 'disciplines',
-                    output: 'selected_subjects'
+                    output_parameter: 'selected_subjects'
                 },
-                output: 'subject_picker_widget',
+                output_parameter: 'subject_picker_widget',
                 conditions: [{
                     all: [{
                         parameter: 'subject_picker_widget',
@@ -148,11 +161,18 @@ export default Ember.Route.extend({
     },
 
     setupController(controller, model) {
-        controller.set('form_config', model);
-        controller.set('actions', model.actions);
+
+        // Set up state defined on the model.
         controller.set('sections', model.sections);
-        controller.set('state', model.initial_state);
-        controller.run_update()
+        controller.set('parameters', model.initial_parameters);
+
+        // Hydrate actions in preperation for engine ignition
+        const actions = model.actions.map(controller.hydrate_action.bind(controller));
+        controller.set('actions', actions);
+
+        // Start the engine.
+        controller.updateState.call(controller, actions);
+
     }
 
 });

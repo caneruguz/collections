@@ -11,7 +11,7 @@
                     <h3>{{section}}</h3>
                     {{#each widgets as |widget|}}
                         {{#if (eq widget.section section)}}
-                            {{component widget.widget_component saveParameter=(action saveParameter state widget.output)}}
+                            {{component widget.widget_component saveParameter=(action saveParameter parameters widget.output) action=widget.action}}
                         {{/if}}
                     {{/each}}
 
