@@ -25,6 +25,7 @@ export default Ember.Controller.extend({
             console.log('stop here');
             action.output_parameter['value'] = action.action.apply(this, action.arg_arr);
             action.output_parameter['state'] = ['defined'];
+            debugger;
         });
     },
 
@@ -32,7 +33,7 @@ export default Ember.Controller.extend({
     // functions and parameters it depends on to operate.
     hydrate_action: function(action) {
         const parameters = this.get('parameters');
-        if (typeof parameters[action.parameter] !== 'object') {
+        if (typeof parameters[action.output_parameter] !== 'object') {
             parameters[action.parameter] = {};
         }
         // Create a new object as not to modify the object returned from the model
@@ -44,10 +45,10 @@ export default Ember.Controller.extend({
             conditions: action.conditions,
             parameters: action.parameters,
             args: action.args,
-            output_parameter: parameters[action.parameter]
+            output_parameter: parameters[action.output_parameter]
         };
-        var argarr = cons_arg_arr.call(this, hydrated_action);
-        hydrated_action['arg_arr'] = argarr
+        debugger;
+        hydrated_action['arg_arr'] = cons_arg_arr.call(this, hydrated_action);
         return hydrated_action;
     },
 
@@ -117,7 +118,7 @@ export default Ember.Controller.extend({
 
     saveParameter(parameters, parameter, value) {
         parameters[parameter] = value;
-        updateState.call(this);
+        this.get('updateState').call(this, this.get('actions'));
     },
 
     widgetActions: Ember.computed('widgets.@each.actions', function() {
@@ -220,7 +221,7 @@ function cons_arg_arr(action) {
         if (typeof action.parameters === 'object' &&
             typeof action.parameters[key] === 'string'
         ) {
-            if (parameters[action.parameters[key]] !== 'object') {
+            if (typeof parameters[action.parameters[key]] !== 'object') {
                 console.log('no parameter, initializing with empty object');
                 parameters[action.parameters[key]] = {};
             }

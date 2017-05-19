@@ -18,6 +18,7 @@ export default Ember.Component.extend({
 
         uploadFile: function(ev) {
 
+            debugger;
             const reader = new FileReader();
             const file_handle = ev.target.files[0];
             const saveParameter = this.attrs.saveParameter

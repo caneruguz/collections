@@ -101,6 +101,8 @@ export default Ember.Route.extend({
                     widget_component: 'text-field',
                     description: 'Enter the title for this preprint',
                     section: 'upload',
+                },
+                parameters: {
                     output_parameter: 'preprint_file_name'
                 },
                 output_parameter: 'preprint_title_widget',
@@ -122,8 +124,10 @@ export default Ember.Route.extend({
                     widget_component: 'button-widget',
                     description: 'Save this section',
                     section: 'upload',
-                    output_parameter: 'upload_section',
                     action_id: '5db3456b-cef7-4c87-bb60-16a04ee89bad'
+                },
+                parameters: {
+                    output_parameter: 'upload_section',
                 },
                 output_parameter: 'save_upload_section_widget',
                 conditions: [{
@@ -146,7 +150,9 @@ export default Ember.Route.extend({
                 args: {
                     widget_component: 'subject-picker',
                     description: 'Save this section',
-                    section: 'disciplines',
+                    section: 'disciplines'
+                },
+                parameters: {
                     output_parameter: 'selected_subjects'
                 },
                 output_parameter: 'subject_picker_widget',
