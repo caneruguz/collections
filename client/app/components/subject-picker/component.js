@@ -39,7 +39,7 @@ function arrayStartsWith(arr, prefix) {
  * ```handlebars
  * {{subject-picker
  *      editMode=editMode
- *      selected=selected
+ *      selected=subjectList
  *      disciplineModifiedToggle=disciplineModifiedToggle
  *      save=(action 'setSubjects')
  *}}
@@ -99,7 +99,7 @@ export default Ember.Component.extend({
     disciplineValid: Ember.computed.notEmpty('selected'),
 
     // Pending subjects
-    selected: Ember.computed('subjects.@each', function() {
+    subjectsList: Ember.computed('subjects.@each', function() {
         return this.get('subjects') ? Ember.$.extend(true, [], this.get('subjects')) : Ember.A();
     }),
 
@@ -108,9 +108,11 @@ export default Ember.Component.extend({
         return Ember.$.extend(true, [], this.get('subjects')).reduce((acc, val) => acc.concat(val), []).uniqBy('id');
     }),
 
-    disciplineChanged: Ember.computed('selected.@each.subject', 'disciplineModifiedToggle',  function() {
+    disciplineChanged: Ember.computed('subjects.@each.subject', 'selected.@each.subject', 'disciplineModifiedToggle',  function() {
         return !(disciplineArraysEqual(subjectIdMap(this.get('subjects')), subjectIdMap(this.get('selected'))));
     }),
+
+    editMode: true,
 
     querySubjects(parents = 'null', tier = 0) {
         this.get('theme.provider')
@@ -131,9 +133,9 @@ export default Ember.Component.extend({
 
     init() {
         this._super(...arguments);
-        this.set('selected', []);
-        this.querySubjects();
         this.set('subjects', []);
+        this.set('selected', this.get('subjectsList'));
+        this.querySubjects();
     },
 
     setSubjects(subjects) {
@@ -216,12 +218,15 @@ export default Ember.Component.extend({
         },
         saveSubjects() {
             let currentSubjects = Ember.$.extend(true, [], this.get('subjects'));
-            let subjectMap = subjectIdMap(this.get('selected'));
+            let subjectMap = Ember.$.extend(true, [], this.get('selected'));
             let disciplineChanged = this.get('disciplineChanged');
             this.attrs.saveParameter({
                 value: subjectMap,
                 state: ['defined']
             });
+            // Update subjects with selected subjects
+            this.set('subjects', Ember.$.extend(true, [], subjectMap));
+            this.set('editMode', false);
         }
 
     }
