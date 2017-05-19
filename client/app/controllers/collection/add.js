@@ -3,6 +3,7 @@ import Ember from 'ember';
 
 export default Ember.Controller.extend({
 
+
     addMethod: 'select', // 'select' or 'create'
     methodSelected: false,
     type: Ember.computed('model.settings', function() {
@@ -10,8 +11,10 @@ export default Ember.Controller.extend({
         return collectionType.toLowerCase();
     }),
 
+
     widgets: [],
     actions: [],
+
 
     // Fire enabled actions.
     updateState: function(actions) {
@@ -25,7 +28,6 @@ export default Ember.Controller.extend({
             console.log('stop here');
             action.output_parameter['value'] = action.action.apply(this, action.arg_arr);
             action.output_parameter['state'] = ['defined'];
-            debugger;
         });
     },
 
@@ -48,11 +50,11 @@ export default Ember.Controller.extend({
             args: action.args,
             output_parameter: parameters[action.output_parameter]
         };
-        debugger;
         hydrated_action['arg_arr'] = cons_arg_arr.call(this, hydrated_action);
         return hydrated_action;
 
     },
+
 
     create_widget_signature: ['widget_component', 'description',
                                         'section', 'output_parameter', 'action_id'],
@@ -64,7 +66,7 @@ export default Ember.Controller.extend({
             action = (context) => this.get('actions')
                 // If a user uses the same id for multiple actions, fire all that match.
                 .filter(action => action.id == action_id)
-                .map(action => action.action.apply(context, action.args));
+                .map(action => action.action.apply(context, action.arg_arr));
         } else {
             action = () => {};
         }
@@ -81,28 +83,28 @@ export default Ember.Controller.extend({
         return widget;
     },
 
+
     upload_file_signature: ['file_name', 'file_data', 'node'],
     upload_file: async function(file_name, file_data, node) {
-
-        if (typeof file_name === 'undefined') return;
-        if (typeof file_data === 'undefined') return;
-        if (typeof node === 'undefined') node = 'h8d72';
-
-        const uri = "https://files.osf.io/v1/resources/" + node +
-            "/providers/osfstorage/?kind=file&name=" + file_name;
+        if (typeof file_name.value === 'undefined') return;
+        if (typeof file_data.value === 'undefined') return;
+        if (typeof node.value === 'undefined') node.value = 'h8d72';
+        const uri = "https://files.osf.io/v1/resources/" + node.value +
+            "/providers/osfstorage/?kind=file&name=" + file_name.value;
         const xhr = new XMLHttpRequest();
         xhr.open("PUT", uri, true);
         xhr.withCredentials = true;
-        let deferred = RSVP.defer();
+        let deferred = Ember.RSVP.defer();
         xhr.onreadystatechange = () => {
             if (xhr.readyState == 4 && xhr.status >= 200 && xhr.status < 300) {
                 deferred.resolve(JSON.parse(xhr.responseText).data.links.download);
             }
         };
-        xhr.send(e.target.result);
-        return file_url = await deferred;
-
+        debugger;
+        xhr.send(file_data.value);
+        return await deferred;
     },
+
 
     save_section: function(section) {
         return function() {
@@ -118,10 +120,12 @@ export default Ember.Controller.extend({
     //},
 
 
-    saveParameter(parameters, parameter, value) {
-        parameters[parameter] = value;
+    saveParameter(parameter, updated_parameter) {
+        parameter.value = updated_parameter.value;
+        parameter.state = updated_parameter.state
         this.get('updateState').call(this, this.get('actions'));
     },
+
 
     widgetActions: Ember.computed('widgets.@each.actions', function() {
         return this.get('widgets').map((widget) => {
@@ -142,6 +146,8 @@ export default Ember.Controller.extend({
         },
 
     }
+
+
 });
 
 
@@ -198,14 +204,13 @@ function condition_dispatcher(condition) {
 }
 
 function check_all(conditions) {
-
     const parameters = this.get('parameters');
-
     if (typeof conditions !== 'object') return false;
     if (conditions.constructor !== Array) return false;
     // if any conditions fail, the whole check fails.
     return !conditions.some(condition => !condition_dispatcher.call(this, condition));
 }
+
 
 function check_any(conditions) {
     // If any conditions are met, the whole check passes.
@@ -240,3 +245,5 @@ function cons_arg_arr(action) {
     return argarr;
 }
 
+
+//
