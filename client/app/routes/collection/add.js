@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-// This section is not used, leftover code? 
+// This section is not used, leftover code?
 // var settings = {
 //   sections: [
 //     {
@@ -61,6 +61,10 @@ export default Ember.Route.extend({
                     value: undefined
                 },
                 subject_picker_widget: {
+                    state: ['undefined'],
+                    value: undefined
+                },
+                basic_info_widget: {
                     state: ['undefined'],
                     value: undefined
                 }
@@ -140,6 +144,21 @@ export default Ember.Route.extend({
                 conditions: [{
                     all: [{
                         parameter: 'subject_picker_widget',
+                        state: 'undefined',
+                    }],
+                }]
+            },{
+                type: 'create_widget',
+                parameters: {
+                    widget_component: 'preprint-basics',
+                    description: 'License and other things',
+                    section: 'basic info',
+                    output: 'basic_info'
+                },
+                output: 'basic_info_widget',
+                conditions: [{
+                    all: [{
+                        parameter: 'basic_info_widget',
                         state: 'undefined',
                     }],
                 }]

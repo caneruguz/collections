@@ -42,6 +42,7 @@ function doiRegexExec(doi) {
 
 
 export default Ember.Component.extend(BasicsValidations, {
+    editMode: true,
     uploadValid: Ember.computed.alias('nodeLocked'), // Once the node has been locked (happens in step one of upload section), users are free to navigate through form unrestricted
     abstractValid: Ember.computed.alias('validations.attrs.basicsAbstract.isValid'),
     doiValid: Ember.computed.alias('validations.attrs.basicsDOI.isValid'),
@@ -57,6 +58,7 @@ export default Ember.Component.extend(BasicsValidations, {
         return node ? node.get('tags').map(fixSpecialChar) : Ember.A();
     }),
     actions: {
+        
         addTag(tag) {
             this.get('basicsTags').pushObject(tag);
         },
@@ -148,35 +150,40 @@ export default Ember.Component.extend(BasicsValidations, {
                 });
             }
 
-            Promise.all([
-                node.save(),
-                model.save()
-            ])
-                .then(() => this.send('next', this.get('_names.2')))
-                // If save fails, do not transition
-                .catch(() => {
-                    this.get('toast').error(
-                        this.get('i18n').t('submit.basics_error')
-                    );
+            this.attrs.saveParameter({
+                value: currentAbstract,
+                state: ['defined']
+            });
 
-                    model.setProperties({
-                        licenseRecord: currentLicenseRecord,
-                        license: currentLicenseType,
-                        doi: currentDOI,
-                    });
-
-                    node.setProperties({
-                        description: currentAbstract,
-                        tags: currentTags,
-                        license: currentNodeLicenseType,
-                        nodeLicense: currentNodeLicenseRecord,
-                    });
-
-                    return Promise.all([
-                        node.save(),
-                        model.save()
-                    ]);
-                });
+            // Promise.all([
+            //     node.save(),
+            //     model.save()
+            // ])
+            //     .then(() => this.send('next', this.get('_names.2')))
+            //     // If save fails, do not transition
+            //     .catch(() => {
+            //         this.get('toast').error(
+            //             this.get('i18n').t('submit.basics_error')
+            //         );
+            //
+            //         model.setProperties({
+            //             licenseRecord: currentLicenseRecord,
+            //             license: currentLicenseType,
+            //             doi: currentDOI,
+            //         });
+            //
+            //         node.setProperties({
+            //             description: currentAbstract,
+            //             tags: currentTags,
+            //             license: currentNodeLicenseType,
+            //             nodeLicense: currentNodeLicenseRecord,
+            //         });
+            //
+            //         return Promise.all([
+            //             node.save(),
+            //             model.save()
+            //         ]);
+            //     });
         },
     }
 });
