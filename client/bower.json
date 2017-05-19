@@ -5,6 +5,7 @@
     "ember-cli-shims": "0.1.1",
     "Faker": "^3.1.0",
     "bootstrap": "^3.3.7",
+    "bootstrap-sass": "^3.3.6",
     "osf-style": "https://github.com/CenterForOpenScience/osf-style.git#48197d234baf07c321c56edfd9f48b5624374453",
     "font-awesome": "^4.7.0",
     "loaders.css": "^0.1.2",

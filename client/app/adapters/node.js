@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import DS from 'ember-data';
+import ENV from '../config/environment';
 
 
 function getToken() {
@@ -16,7 +17,7 @@ function getToken() {
 
 export default DS.JSONAPIAdapter.extend({
     session: Ember.inject.service(),
-    host: 'https://staging-api.osf.io',
+    host: ENV.osfHostUrl,
     namespace: 'v2',
     ajax(url, method, hash) {
         hash = hash || {};

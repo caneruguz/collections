@@ -1,39 +1,23 @@
 <div class="coll-add-choice">
     <div class="container">
-        <h3> Add content </h3>
-        <div class="add-panel m-t-lg p-md">
-            {{#if (eq model.settings.collectionType 'Website')}}
-                {{add-website model=model transition=(action "transition")}}
-            {{else}}
-                {{#if methodSelected}}
-                        <div class="pointer p-md" {{action toggleProperty 'methodSelected'}}>
-                            <button class="btn btn-link">
-                                <i class="fa fa-angle-left"></i>
-                                Back
-                            </button>
-                        </div>
-                        {{#if (eq addMethod 'select')}}
-                            {{add-node model=model type=type transition=(action "transition")}}
+        <h2>Add A Preprint</h2>
+        {{#if (eq model.settings.collectionType 'Website')}}
+            {{add-website model=model transition=(action "transition")}}
+        {{else}}
+            {{#each sections as |section|}}
+
+                <div class="add-panel m-t-lg p-md">
+                    <!-- The step to add existing projects has to be put back here at some point. Do not remove this comment. -->
+                    <h3>{{section}}</h3>
+                    {{#each widgets as |widget|}}
+                        {{#if (eq widget.section section)}}
+                            {{component widget.widget_component saveParameter=(action saveParameter state widget.output)}}
                         {{/if}}
-                        {{#if (eq addMethod 'create')}}
-                            <div class="p-lg">This section is a placeholder for components that add their project types; i.e. "Add Preprint" </div>
-                        {{/if}}
-                {{else}}
+                    {{/each}}
 
+                </div>
 
-
-                    <div class="row">
-                        <div class="col-xs-6">
-                            <div class="p-md add-select-method" {{action 'updateProperty' 'addMethod' 'create'}}> Create a new {{model.settings.collectionType}} </div>
-                        </div>
-                        <div class="col-xs-6">
-                            <div class="p-md add-select-method" {{action 'updateProperty' 'addMethod' 'select'}}> Add existing {{model.settings.collectionType}} </div>
-                        </div>
-                    </div>
-                {{/if}}
-            {{/if}}
-
-            {{preprint-basics}}
-        </div>
+            {{/each}}
+        {{/if}}
     </div>
 </div>

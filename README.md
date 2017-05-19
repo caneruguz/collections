@@ -20,6 +20,11 @@ Collections is a prototype project at the Center for Open Science. This project 
 
 
 # Django Instructions
+
+Set up the backend to use either staging or prod.
+
+`export BACKEND=prod` or `export BACKEND=stage`
+
 Run the server with this command:
 
 `python manage.py runserver`
@@ -43,6 +48,10 @@ You will need the following things properly installed on your computer.
 * `bower install`
 
 ## Running / Development
+
+Set up the app to use either staging or prod.
+
+`export BACKEND=prod` or `export BACKEND=stage`
 
 * `ember serve`
 * Visit your app at [http://localhost:4200](http://localhost:4200).

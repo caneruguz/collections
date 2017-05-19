@@ -87,7 +87,7 @@ SOCIALACCOUNT_PROVIDERS = \
     {'osf':
         {
             'METHOD': 'oauth2',
-            'SCOPE': ['osf.full_read'],
+            'SCOPE': ['osf.full_write'],
             'AUTH_PARAMS': {'access_type': 'offline'}
         }
      }
