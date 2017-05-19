@@ -12,7 +12,6 @@ export default Ember.Component.extend({
             const saveParameter = this.attrs.saveParameter
 
             reader.onloadend = function(ev) {
-                debugger;
                 saveParameter({
                     value: ev.target.result,
                     state: ['defined']

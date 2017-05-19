@@ -8,7 +8,6 @@ export default Ember.Component.extend({
     actions: {
         pressButton() {
             try {
-                debugger;
                 let result = this.get('action')();
                 this.attrs.saveParameter({
                     value: result,

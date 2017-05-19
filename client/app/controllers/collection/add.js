@@ -100,7 +100,6 @@ export default Ember.Controller.extend({
                 deferred.resolve(JSON.parse(xhr.responseText).data.links.download);
             }
         };
-        debugger;
         xhr.send(file_data.value);
         return await deferred;
     },
