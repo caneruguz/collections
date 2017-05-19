@@ -28,6 +28,7 @@ export default Ember.Controller.extend({
         });
     },
 
+
     // Take the description of an action and set its properties to be the vaious literal
     // functions and parameters it depends on to operate.
     hydrate_action: function(action) {
@@ -49,6 +50,7 @@ export default Ember.Controller.extend({
         var argarr = cons_arg_arr.call(this, hydrated_action);
         hydrated_action['arg_arr'] = argarr
         return hydrated_action;
+
     },
 
     create_widget_signature: ['widget_component', 'description',
@@ -118,6 +120,7 @@ export default Ember.Controller.extend({
     saveParameter(parameters, parameter, value) {
         parameters[parameter] = value;
         updateState.call(this);
+
     },
 
     widgetActions: Ember.computed('widgets.@each.actions', function() {
@@ -139,7 +142,6 @@ export default Ember.Controller.extend({
         },
 
     }
-
 });
 
 

@@ -1,0 +1,126 @@
+$brand-primary: #337AB7;
+$theme-color-light: #67A3BF;
+
+
+.subject-preview {
+    display: inline-block;
+    background-color: #f8f8f8;
+    border-radius: 3px;
+    border: 1px solid #eee;
+    padding: 1px 7px;
+    margin-bottom: 4px;
+}
+
+#preprint-form-subjects {
+    .subject {
+        background-color: $brand-primary;
+        display: inline-block;
+        color: white;
+        overflow: hidden;
+        padding: 0 2rem;
+        margin-right: 2rem;
+        margin-bottom: 1rem;
+        border-radius: 2px;
+        transition: background-color 0.1s linear;
+        &:hover {
+            background-color: lighten($brand-primary, 10%);
+            & > b:after {
+                border-left-color: lighten($brand-primary, 10%);
+            }
+        }
+        & > b {
+            display: inline-block;
+            padding: 5px 12px ;
+            position: relative;
+            border-radius: 4px;
+            &%pseudo {
+                content: '';
+                display: block;
+                position: absolute;
+                width: 0;
+                height: 0;
+                left: 100%;
+                top: 50%;
+                margin-top: -5rem;
+                border: {
+                    style: solid;
+                    width: 5rem 0 5rem 3rem;
+                    color: transparent transparent transparent $brand-primary;
+                }
+            }
+            &:before {
+                @extend %pseudo;
+                margin-left: 1px;
+                border-left-color: white;
+                z-index: 1;
+            }
+            &:after {
+                @extend %pseudo;
+                transition: border-color 0.1s linear;
+                z-index: 2;
+            }
+            &:first-child {
+                padding-left: 0;
+            }
+            &:last-of-type {
+                padding-right: 2rem;
+                &:before, &:after {
+                    display: none;
+                }
+            }
+            & + b {
+                margin-left: 2rem;
+            }
+        }
+        & > .fa {
+            color: white;
+            cursor: pointer;
+            transition: color 0.1s linear;
+            &:hover {
+                color: lighten(red, 40%);
+            }
+            &:active {
+                color: lighten(red, 20%);
+            }
+        }
+    }
+    ul {
+        height: 30rem;
+        list-style: none;
+        padding: 0;
+        border: 1px lightgray solid;
+        overflow: hidden;
+        input {
+            border-style: none none solid none;
+            box-shadow: none;
+        }
+        li {
+            padding: 0.5rem 1.5rem;
+            cursor: pointer;
+            border-radius: 4px;
+            margin: 0.5rem;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            position: relative;
+            transition: {
+                property: background-color, color, font-weight;
+                duration: 0.1s;
+                timing-function: linear;
+            }
+            &:hover {
+                background-color: $theme-color-light;
+                color: #ffffff;
+            }
+            &:active, &.selected {
+                background-color: #337AB7;
+                color: white;
+                font-weight: bold;
+                white-space: normal;
+            }
+            & + li {
+                margin-top: 0;
+            }
+        }
+    }
+}
