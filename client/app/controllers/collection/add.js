@@ -128,7 +128,6 @@ export default Ember.Controller.extend({
     saveParameter(parameter, updated_parameter) {
         parameter.value = updated_parameter.value;
         parameter.state = updated_parameter.state
-        debugger;
         this.get('updateState').call(this, this.get('formActions'));
     },
 
