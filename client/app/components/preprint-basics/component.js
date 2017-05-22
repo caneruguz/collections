@@ -105,7 +105,6 @@ export default Ember.Component.extend(BasicsValidations, {
                 value: this.get('basicsAbstract'),
                 state: ['defined']
             });
-             debugger;
             this.set('editMode', false);
 
             // Promise.all([

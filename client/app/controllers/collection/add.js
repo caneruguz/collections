@@ -132,20 +132,12 @@ export default Ember.Controller.extend({
         if (typeof file_name.value === 'undefined') return;
         if (typeof file_data.value === 'undefined') return;
         if (typeof node.value === 'undefined') node.value = 'h8d72';
-        debugger;
         const uri = ENV.OSF.waterbutlerUrl + "v1/resources/" + node.value +
             "/providers/osfstorage/?kind=file&name=" + file_name.value;
         const xhr = new XMLHttpRequest();
         xhr.open("PUT", uri, true);
         xhr.withCredentials = false;
-
-        //hash = hash || {};
-        //hash.crossOrigin = true;
-        //hash.xhrFields = { withCredentials: false };
-        //hash.headers = hash.headers || {};
         xhr.setRequestHeader('Authorization', 'Bearer ' + getToken());
-        
-        //xhr.setRequestHeader('X-Csrftoken', readCookie('csrftoken'));
 
         let deferred = Ember.RSVP.defer();
         xhr.onreadystatechange = () => {
