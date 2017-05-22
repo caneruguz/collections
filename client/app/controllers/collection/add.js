@@ -1,4 +1,43 @@
 import Ember from 'ember';
+import ENV from '../../config/environment';
+
+
+function createCookie(name,value,days) {
+	if (days) {
+		var date = new Date();
+		date.setTime(date.getTime()+(days*24*60*60*1000));
+		var expires = "; expires="+date.toGMTString();
+	}
+	else var expires = "";
+	document.cookie = name+"="+value+expires+"; path=/";
+}
+
+function readCookie(name) {
+	var nameEQ = name + "=";
+	var ca = document.cookie.split(';');
+	for(var i=0;i < ca.length;i++) {
+		var c = ca[i];
+		while (c.charAt(0)==' ') c = c.substring(1,c.length);
+		if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+	}
+	return null;
+}
+
+function eraseCookie(name) {
+	createCookie(name,"",-1);
+}
+
+function getToken() {
+    var token;
+    var session = window.localStorage['ember_simple_auth:session'];
+    if (session) {
+        token = JSON.parse(session)['authenticated'];
+        if ('attributes' in token) {
+            return token['attributes']['accessToken'];
+        }
+        return token;
+    }
+}
 
 
 export default Ember.Controller.extend({
@@ -93,21 +132,30 @@ export default Ember.Controller.extend({
         if (typeof file_name.value === 'undefined') return;
         if (typeof file_data.value === 'undefined') return;
         if (typeof node.value === 'undefined') node.value = 'h8d72';
-        const uri = "https://files.osf.io/v1/resources/" + node.value +
+        debugger;
+        const uri = ENV.OSF.waterbutlerUrl + "v1/resources/" + node.value +
             "/providers/osfstorage/?kind=file&name=" + file_name.value;
         const xhr = new XMLHttpRequest();
         xhr.open("PUT", uri, true);
-        xhr.withCredentials = true;
+        xhr.withCredentials = false;
+
+        //hash = hash || {};
+        //hash.crossOrigin = true;
+        //hash.xhrFields = { withCredentials: false };
+        //hash.headers = hash.headers || {};
+        xhr.setRequestHeader('Authorization', 'Bearer ' + getToken());
+        
+        //xhr.setRequestHeader('X-Csrftoken', readCookie('csrftoken'));
+
         let deferred = Ember.RSVP.defer();
         xhr.onreadystatechange = () => {
             if (xhr.readyState == 4 && xhr.status >= 200 && xhr.status < 300) {
-                //deferred.resolve(JSON.parse(xhr.responseText).data.links.download);
+                deferred.resolve(JSON.parse(xhr.responseText).data.links.download);
             }
         };
-        //xhr.send(file_data.value);
-        //await deferred;
-        var url = await 'http://MYCOOLFILEURL';
-        return url
+        xhr.send(file_data.value);
+        let value = await deferred.promise;
+        return value
     },
 
 
