@@ -13,7 +13,7 @@ export default Ember.Controller.extend({
 
 
     widgets: [],
-    actions: [],
+    formActions: [],
 
 
     // Fire enabled actions.
@@ -64,7 +64,7 @@ export default Ember.Controller.extend({
         let action;
         if (typeof action_id === "string") {
             action = async (context) => {
-                let action_obj = this.get('actions')
+                let action_obj = this.get('formActions')
                     // If a user uses the same id for multiple actions,
                     // fire the first that matches.
                     .find(action => action.id == action_id)
@@ -129,7 +129,7 @@ export default Ember.Controller.extend({
         parameter.value = updated_parameter.value;
         parameter.state = updated_parameter.state
         debugger;
-        this.get('updateState').call(this, this.get('actions'));
+        this.get('updateState').call(this, this.get('formActions'));
     },
 
 
@@ -220,7 +220,7 @@ function check_all(conditions) {
 
 function check_any(conditions) {
     // If any conditions are met, the whole check passes.
-    return action.conditions.some(condition_dispatcher.bind(this))
+    return conditions.some(condition_dispatcher.bind(this))
 }
 
 

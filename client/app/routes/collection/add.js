@@ -177,7 +177,7 @@ export default Ember.Route.extend({
 
         // Hydrate actions in preperation for engine ignition
         const actions = model.actions.map(controller.hydrate_action.bind(controller));
-        controller.set('actions', actions);
+        controller.set('formActions', actions);
 
         // Start the engine.
         controller.updateState.call(controller, actions);
