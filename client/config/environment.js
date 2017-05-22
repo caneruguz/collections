@@ -150,6 +150,9 @@ module.exports = function(environment) {
   if (environment === 'stage') {
     ENV['osfHostUrl'] = 'https://staging-api.osf.io';
   }
+
+
+    ENV['sanity'] = environment;
   if (environment === 'production') {
     ENV['osfHostUrl'] = 'https://api.osf.io';
 
