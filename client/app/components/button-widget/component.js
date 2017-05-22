@@ -6,9 +6,11 @@ export default Ember.Component.extend({
     buttonString: 'Save',
 
     actions: {
-        pressButton() {
+        async pressButton() {
             try {
-                let result = this.get('action')();
+                let result = await this.get('action')();
+                console.log(result);
+                debugger;
                 this.attrs.saveParameter({
                     value: result,
                     state: ['defined']

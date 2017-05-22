@@ -74,7 +74,7 @@ export default Ember.Route.extend({
                     file_name: 'preprint_file_name',
                     node: 'preprint_node'
                 },
-                output_parameter: 'file_url',
+                output_parameter: 'preprint_file_url',
             }, {
                 type: 'create_widget',
                 args: {
@@ -127,7 +127,7 @@ export default Ember.Route.extend({
                     action_id: '5db3456b-cef7-4c87-bb60-16a04ee89bad'
                 },
                 parameters: {
-                    output_parameter: 'upload_section',
+                    output_parameter: 'preprint_file_url',
                 },
                 output_parameter: 'save_upload_section_widget',
                 conditions: [{
@@ -160,6 +160,9 @@ export default Ember.Route.extend({
                     all: [{
                         parameter: 'subject_picker_widget',
                         state: 'undefined',
+                    }, {
+                        parameter: 'preprint_file_url',
+                        state: 'defined'
                     }],
                 }]
             }]

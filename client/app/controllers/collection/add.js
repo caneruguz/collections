@@ -37,7 +37,7 @@ export default Ember.Controller.extend({
     hydrate_action: function(action) {
         const parameters = this.get('parameters');
         if (typeof parameters[action.output_parameter] !== 'object') {
-            parameters[action.parameter] = {};
+            parameters[action.output_parameter] = {};
         }
         // Create a new object as not to modify the object returned from the model
         const hydrated_action = {
@@ -63,10 +63,14 @@ export default Ember.Controller.extend({
     create_widget: function(widget_component, description, section, output_parameter, action_id) {
         let action;
         if (typeof action_id === "string") {
-            action = (context) => this.get('actions')
-                // If a user uses the same id for multiple actions, fire all that match.
-                .filter(action => action.id == action_id)
-                .map(action => action.action.apply(context, action.arg_arr));
+            action = async (context) => {
+                let action_obj = this.get('actions')
+                    // If a user uses the same id for multiple actions,
+                    // fire the first that matches.
+                    .find(action => action.id == action_id)
+
+                return await action_obj.action.apply(context, action_obj.arg_arr);
+            }
         } else {
             action = () => {};
         }
@@ -97,11 +101,13 @@ export default Ember.Controller.extend({
         let deferred = Ember.RSVP.defer();
         xhr.onreadystatechange = () => {
             if (xhr.readyState == 4 && xhr.status >= 200 && xhr.status < 300) {
-                deferred.resolve(JSON.parse(xhr.responseText).data.links.download);
+                //deferred.resolve(JSON.parse(xhr.responseText).data.links.download);
             }
         };
-        xhr.send(file_data.value);
-        return await deferred;
+        //xhr.send(file_data.value);
+        //await deferred;
+        var url = await 'http://MYCOOLFILEURL';
+        return url
     },
 
 
@@ -122,6 +128,7 @@ export default Ember.Controller.extend({
     saveParameter(parameter, updated_parameter) {
         parameter.value = updated_parameter.value;
         parameter.state = updated_parameter.state
+        debugger;
         this.get('updateState').call(this, this.get('actions'));
     },
 
