@@ -1,6 +1,6 @@
 @import 'components/navbar-auth-dropdown';
+@import 'validated-input';
 @import 'components/subject-picker';
-
 
 $navbar-color: #009688;
 $light-blue-banner: #e8f0f1;
@@ -326,3 +326,90 @@ tr.item-row-selected {
     background-position: center;
     background-repeat: no-repeat;
 }
+
+
+/* Preprint forms -- copied over from ember-preprints repo*/
+.preprint-form-section {
+    header {
+        @extend a;
+        cursor: pointer;
+        font: {
+            size: 16px;
+            font-weight: bold;
+        }
+        display: block;
+        margin: 1rem 0;
+        &:hover, &:focus {
+            text-decoration: none;
+        }
+        &:after {
+            content: "";
+            display: block;
+            width: 100%;
+            clear: both;
+        }
+        &.cp-is-open {
+            cursor: default;
+            color: #333;
+        }
+        &.valid {
+            .preprint-section-status .fa {
+                color: #009688;
+            }
+        }
+        &.invalid {
+            .preprint-section-status .fa {
+                color: #F44336;
+            }
+        }
+        &.not-validated {
+            .preprint-section-status .fa {
+                color: gray;
+            }
+        }
+        .fa {
+            font-size: 20px;
+        }
+        .preprint-section-status .fa {
+            transition: color 0.1s linear;
+        }
+    }
+    .cp-Panel-body {
+        opacity: 0;
+        overflow: hidden;
+        transition: {
+            property: height, opacity;
+            duration: 0.2s;
+            timing-function: linear;
+        }
+        &.cp-is-open {
+            opacity: 1;
+        }
+    }
+    // THESE STYLES ARE INTERFERING WITH MY STYLES.
+    // .row {
+    //     margin: 0;
+    // }
+    // label, input, textarea {
+    //     display: block;
+    // }
+    label > input, label > textarea {
+        font-weight: normal;
+    }
+    textarea {
+        resize: none;
+    }
+}
+
+
+
+#preprint-form-basics {
+    span.required:after {
+        content: "(required)";
+        color: lighten(red, 30%);
+        font-weight: normal;
+        float: right;
+    }
+}
+
+/* End of Preprint forms */

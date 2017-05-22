@@ -5,9 +5,8 @@
             {{add-website model=model transition=(action "transition")}}
         {{else}}
             {{#each sections as |section|}}
-
                 <div class="add-panel m-t-lg p-md">
-
+                    <!-- The step to add existing projects has to be put back here at some point. Do not remove this comment. -->
                     <h3>{{section}}</h3>
                     {{#each widgets as |widget|}}
                         {{#if (eq widget.section section)}}
@@ -17,9 +16,7 @@
                             }}
                         {{/if}}
                     {{/each}}
-
                 </div>
-
             {{/each}}
         {{/if}}
     </div>
