@@ -18,7 +18,7 @@ import Ember from 'ember';
 
 export default Ember.Route.extend({
     model() {
-        let model = {
+        return {
             submission_form_name: 'Preprints Submission Form',
             sections: [
                 'upload',
@@ -164,10 +164,6 @@ export default Ember.Route.extend({
                 }]
             }]
         };
-        this.store.findRecord('node', 'h4wub').then((result)=>{
-            model.node = result;
-        });
-        return model;
     },
 
     setupController(controller, model) {

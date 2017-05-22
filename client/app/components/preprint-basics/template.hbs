@@ -2,7 +2,7 @@
     {{#if editMode}}
         <div class='row m-b-md'>
             <div class='col-xs-12'>
-                {{license-picker licenses=availableLicenses currentValues=basicsLicense showCategories=false editLicense=(action 'editLicense') allowDismiss=false autosave=true showBorder=false pressSubmit=(action 'saveBasics')}}
+                {{license-picker currentValues=basicsLicense showCategories=false editLicense=(action 'editLicense') allowDismiss=false autosave=true showBorder=false pressSubmit=(action 'saveBasics')}}
                 <br>
                 <div class="row">
                     <div class='col-xs-12'>
@@ -55,8 +55,28 @@
     {{else}}
     <div class='row m-b-md'>
         <div class='col-xs-12'>
-            {{basicsAbstract}}
+            <b>Abstract:</b>
+            <p>{{basicsAbstract}}</p>
+            <b>License:</b>
+            <p>
+                {{#if basicsLicense}}
+                    <span>{{basicsLicense.licenseType.name}}</span>
+                {{else}}
+                    <i>Not provided</i>
+                {{/if}}
+            </p>
+            <b>DOI:</b>
+            <p>{{#if basicsDOI}}{{basicsDOI}}{{else}}<i>Not provided</i>{{/if}}</p>
+            <b>Tags:</b>
+            <p>{{#if basicsTags}}
+                    {{#each basicsTags as |tag|}} <span class="subject-preview">{{tag}}</span>{{/each}}
+                {{else}}
+                    <i>Not provided</i>
+                {{/if}}
+            </p>
+
             <p class="text-muted" {{ action toggleProperty 'editMode'}} > Click to edit </p>
+
         </div>
     </div>
     {{/if}}
