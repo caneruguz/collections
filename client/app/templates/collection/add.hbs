@@ -1,11 +1,19 @@
+<h1 style="
+    margin-top: 0;
+    padding-top: 80px;
+    padding-bottom: 50px;
+    background: url('/img/submit.jpg') top center no-repeat;
+    border-bottom: 1px solid #f0f0f0;
+    background-size: cover;
+    text-align: center;
+">Add Preprint</h1>
 <div class="coll-add-choice">
     <div class="container">
-        <h2>Add A Preprint</h2>
         {{#if (eq model.settings.collectionType 'Website')}}
             {{add-website model=model transition=(action "transition")}}
         {{else}}
             {{#each sections as |section|}}
-                <div class="add-panel m-t-lg p-md">
+                <div class="add-panel m-t-lg p-md" style='overflow: hidden'>
                     <!-- The step to add existing projects has to be put back here at some point. Do not remove this comment. -->
                     <h3>{{section}}</h3>
                     {{#each widgets as |widget|}}

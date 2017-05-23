@@ -171,17 +171,22 @@ export default Ember.Route.extend({
                 }]
             },{
                 type: 'create_widget',
-                parameters: {
+                args: {
                     widget_component: 'preprint-basics',
                     description: 'License and other things',
-                    section: 'basic info',
-                    output: 'basic_info'
+                    section: 'basic info'
                 },
-                output: 'basic_info_widget',
+                parameters: {
+                    output_parameter: 'basic_info'
+                },
+                output_parameter: 'basic_info_widget',
                 conditions: [{
                     all: [{
                         parameter: 'basic_info_widget',
                         state: 'undefined',
+                    }, {
+                        parameter: 'selected_subjects',
+                        state: 'defined'
                     }],
                 }]
             }]

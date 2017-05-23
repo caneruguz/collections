@@ -10,7 +10,6 @@ export default Ember.Component.extend({
             //try {
                 let result = await this.get('action')();
                 console.log(result);
-                debugger;
                 this.attrs.saveParameter({
                     value: result,
                     state: ['defined']
