@@ -193,7 +193,7 @@ export default Ember.Route.extend({
                         state: 'defined'
                     }],
                 }]
-            },{
+            }, {
                 type: 'create_widget',
                 args: {
                     widget_component: 'preprint-form-authors',
@@ -215,8 +215,7 @@ export default Ember.Route.extend({
                     }
                     ],
                 }]
-            }
-        ]
+            }]
         };
     },
 
