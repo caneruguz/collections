@@ -413,3 +413,247 @@ tr.item-row-selected {
 }
 
 /* End of Preprint forms */
+
+/* Authors from preprints */
+.vert-align-disabled-permissions {
+  padding-top: 6px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.vert-align-enabled-permissions {
+  padding-top: 2px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.drag-drop-contrib {
+  padding-top: 4px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  color: gray;
+}
+
+.permission-select {
+  width: 110px;
+  display: inline;
+}
+.vert-align {
+  padding-top: 4px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.vert-align-contributor-name {
+  padding-top: 8px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.bib-padding {
+  text-align: center;
+}
+
+// Author table divisions
+.author-table {
+  td {
+    border-top: 1px solid #ddd;
+  }
+}
+
+.col-division-left {
+  padding-left: 20px;
+  border-left: 1px solid #ccc;
+}
+
+.col-division-right {
+  border-right: 1px solid #ccc;
+}
+
+.author-search-box {
+  padding-top: 20px;
+}
+
+.unregisteredUsers {
+  text-align: center;
+  margin-top: 20px;
+  padding-top: 10px;
+  padding-bottom:20px;
+  background-color: #EEEEEE;
+}
+
+.unregistered-name {
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+
+.unregistered-email {
+  padding-bottom: 20px;
+  padding-top: 5px;
+}
+
+.unregistered-submit {
+  padding-top: 10px;
+}
+
+.header-inline {
+  display: inline;
+}
+
+.drag-drop {
+  padding-top: 10px;
+}
+
+.author-header {
+  padding-top: 15px;
+}
+
+tr.contributor-row:hover {
+  background: #EEE;
+}
+
+span.sortable-bars:hover {
+  cursor: move;
+}
+
+.sortable-item {
+  transition: background-color 125ms;
+  &.is-dragging {
+    transition-duration: 0;
+    background: white;
+    z-index: 10;
+  }
+}
+
+.contrib-column-header {
+  padding-left: 12px;
+}
+
+.disabled-checkmark {
+  padding-left: 18px;
+  padding-right: 18px;
+}
+
+.nudge-right {
+  text-align: left;
+}
+
+.icon-no-border {
+  background:none;
+  border:none;
+  font-size:1em;
+  padding:0px;
+}
+
+@keyframes greenHighlight {
+  0% {
+    background: #DFF0D8;
+  }
+  100% {
+    background: white;
+  }
+}
+
+@keyframes greenGrayHighlight {
+  0% {
+    background: #DFF0D8
+  }
+  100% {
+    background: #F8F8F8;
+  }
+}
+
+@keyframes redHighlight {
+  0% {
+    background: #F2DEDE;
+  }
+  100% {
+    background: white;
+  }
+}
+
+.successHighlightGreenGray {
+  animation: greenGrayHighlight 2s;
+}
+
+.successHighlight {
+  animation: greenHighlight 2s;
+}
+
+.errorHighlight {
+  animation: redHighlight 2s;
+}
+@media (max-width: 768px) { // Contributors section, XS screen
+  .current-authors {
+    table, td, tr {
+      display: block;
+      width: 100% !important;
+    }
+
+    th {
+      display: None;
+    }
+
+    td {
+      border-top: none !important;
+    }
+    .author-cols {
+      margin-top: 10px;
+    }
+
+    td:before {
+      white-space: nowrap;
+    }
+
+    .bib-padding {
+      text-align: left;
+      padding-bottom: 10px;
+      padding-right: 30px
+    }
+
+    .checkbox-padding {
+      padding-right: 20px;
+      padding-left: 20px;
+    }
+
+    .permission-label {
+      padding-right: 10px;
+      padding-left: 18px;
+    }
+
+    .vert-align-disabled-permissions {
+      padding-top: 0px;
+    }
+    .vert-align-enabled-permissions {
+      padding-top: 0px;
+    }
+    .drag-drop-contrib {
+      padding-top: 0px;
+    }
+    .vert-align {
+      padding-top: 0px;
+    }
+    .vert-align-contributor-name {
+      padding-top: 0px;
+    }
+    .contributor-row {
+      border-top: 1px solid #EEE !important;
+      width: auto;
+      padding-left: 10px;
+    }
+    .delete-contrib-button {
+      padding-bottom: 10px;
+    }
+    .remove-contributor-xs {
+      padding: 0;
+      border: none;
+      background: none;
+      color: #D9534F;
+    }
+    .remove-contributor-padding-xs {
+      padding-right: 10px;
+    }
+  }
+}
+
+/* End of Authors */

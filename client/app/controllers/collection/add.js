@@ -50,10 +50,21 @@ export default Ember.Controller.extend({
         return collectionType.toLowerCase();
     }),
 
+    // Author widget needs, may potentially be moved
+    toast: Ember.inject.service('toast'),
+    user: Ember.inject.service('currentUser'),
+    parentContributors: Ember.A(),
+    node: Ember.computed('model', function(){
+        return this.get('model.node');
+    }),
+    contributors: Ember.computed('model', function(){
+        return this.get('model.node.contributors');
+    }),
+    // End of author
+
 
     widgets: [],
     formActions: [],
-
 
     // Fire enabled actions.
     updateState: function(actions) {
@@ -189,6 +200,7 @@ export default Ember.Controller.extend({
         transition(name, id) {
             this.transitionToRoute(name, id);
         },
+
 
     }
 
