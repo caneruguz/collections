@@ -50,18 +50,6 @@ export default Ember.Controller.extend({
         return collectionType.toLowerCase();
     }),
 
-    // Author widget needs, may potentially be moved
-    toast: Ember.inject.service('toast'),
-    user: Ember.inject.service('currentUser'),
-    parentContributors: Ember.A(),
-    node: Ember.computed('model', function(){
-        return this.get('model.node');
-    }),
-    contributors: Ember.computed('model', function(){
-        return this.get('model.node.contributors');
-    }),
-    // End of author
-
 
     widgets: [],
     formActions: [],
@@ -142,7 +130,7 @@ export default Ember.Controller.extend({
     upload_file: async function(file_name, file_data, node) {
         if (typeof file_name.value === 'undefined') return;
         if (typeof file_data.value === 'undefined') return;
-        if (typeof node.value === 'undefined') node.value = 'h8d72';
+        if (typeof node.value === 'undefined') node.value = '6yptj';
         const uri = ENV.OSF.waterbutlerUrl + "v1/resources/" + node.value +
             "/providers/osfstorage/?kind=file&name=" + file_name.value;
         const xhr = new XMLHttpRequest();

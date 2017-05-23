@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import CpPanelBodyComponent from 'ember-collapsible-panel/components/cp-panel-body';
 import { permissionSelector } from 'ember-osf/const/permissions';
-
+import NodeActionsMixin from 'ember-osf/mixins/node-actions';
 // import Analytics from 'ember-osf/mixins/analytics';
 /**
  * @module ember-preprints
@@ -12,34 +12,28 @@ import { permissionSelector } from 'ember-osf/const/permissions';
  * Displays current preprint authors and their permissions/bibliographic information. Allows user to search for
  * authors, add authors, edit authors permissions/bibliographic information, and remove authors.  Actions
  * that are not allowed are disabled (for example, you cannot remove the sole bibliographic author).
- *
- * Sample usage:
- * ```handlebars
- * {{preprint-form-authors
- *    contributors=contributors
- *    parentContributors=parentContributors
- *    node=node
- *    isAdmin=isAdmin
- *    canEdit=canEdit
- *    currentUser=user
- *    addContributor=(action 'addContributor')
- *    addContributors=(action  'addContributors')
- *    findContributors=(action 'findContributors')
- *    searchResults=searchResults
- *    removeContributor=(action 'removeContributor')
- *    editContributor=(action 'updateContributor')
- *    reorderContributors=(action 'reorderContributors')
- *    highlightSuccessOrFailure=(action 'highlightSuccessOrFailure')
- *    parentNode=parentNode
- *    editMode=editMode
-}}
- * ```
  * @class preprint-form-authors
  */
-export default CpPanelBodyComponent.extend( {
+export default CpPanelBodyComponent.extend( NodeActionsMixin, {
     i18n: Ember.inject.service(),
+
+    // Variables that used to pass in from Controller
+    store: Ember.inject.service(),
+    toast: Ember.inject.service('toast'),
+    currentUser: Ember.inject.service('currentUser'),
+    parentContributors: Ember.A(),
+    searchResults: Ember.A(), // defaults, need update
+    editMode: 'Submit', // defaults, need update
+    parentNode: null,// defaults, need update
+    isAdmin: true, // defaults, need update
+    canEdit: true, // defaults, need update
+    node: null,
+    contributors: Ember.computed('node', function(){
+        return this.get('node.contributors');
+    }),
+
+
     valid: Ember.computed.alias('newContributorId'),
-    toast: Ember.inject.service(),
     authorModification: false,
     currentPage: 1,
     // Permissions labels for dropdown
@@ -55,9 +49,7 @@ export default CpPanelBodyComponent.extend( {
     }),
     // In Add mode, contributors are emailed on creation of preprint. In Edit mode,
     // contributors are emailed as soon as they are added to preprint.
-    sendEmail: Ember.computed('editMode', function() {
-        return this.get('editMode') ? 'preprint' : false;
-    }),
+    sendEmail: false,
     numParentContributors: Ember.computed('parentNode', function() {
         if (this.get('parentNode')) {
             return this.get('parentNode').get('contributors').get('length');
@@ -85,6 +77,12 @@ export default CpPanelBodyComponent.extend( {
             return;
         }
     }),
+    init(){
+        this._super(...arguments);
+        this.get('store').findRecord('node', 'h4wub').then((result)=>{
+            this.set('node', result);
+         });
+    },
     /**
      * findContributors method.  Queries APIv2 users endpoint on any of a set of name fields.  Fetches specified page of results.
      *
@@ -94,7 +92,7 @@ export default CpPanelBodyComponent.extend( {
      * @return {User[]} Returns specified page of user records matching query
      */
     findContributors(query, page) {
-          return this.store.query('user', {
+          return this.get('store').query('user', {
               filter: {
                 'full_name,given_name,middle_names,family_name': query
               },
@@ -124,9 +122,8 @@ export default CpPanelBodyComponent.extend( {
     },
     actions: {
         // Adds contributor then redraws view - addition of contributor may change which update/remove contributor requests are permitted
-        addContributor(user) {
-            debugger;
-            this.attrs.addContributor(user.id, 'write', true, this.get('sendEmail'), undefined, undefined, true).then((res) => {
+        addContributorLocal(user) {
+            this.get('actions.addContributor').call(this, user.id, 'write', true, false, undefined, undefined, true).then((res) => {
                 this.toggleAuthorModification();
                 this.get('contributors').pushObject(res);
                 this.get('toast').success(this.get('i18n').t('submit.preprint_author_added'));
@@ -150,7 +147,7 @@ export default CpPanelBodyComponent.extend( {
                     });
                 }
             });
-            this.attrs.addContributors(contributorsToAdd, this.get('sendEmail'))
+            this.get('actions.addContributors').call(this, contributorsToAdd, this.get('sendEmail'))
                 .then((contributors) => {
                     contributors.map((contrib) => {
                         this.get('contributors').pushObject(contrib);
@@ -165,7 +162,7 @@ export default CpPanelBodyComponent.extend( {
         // Should wait to transition until request has completed.
         addUnregisteredContributor(fullName, email) {
             if (fullName && email) {
-                let res = this.attrs.addContributor(null, 'write', true, this.get('sendEmail'), fullName, email, true);
+                let res = this.get('actions.addContributor').call(this, null, 'write', true, this.get('sendEmail'), fullName, email, true);
                 res.then((contributor) => {
                     this.get('contributors').pushObject(contributor);
                     this.toggleAuthorModification();
@@ -188,7 +185,7 @@ export default CpPanelBodyComponent.extend( {
         findContributors(page) {
             let query = this.get('query');
             if (query) {
-                this.attrs.findContributors(query, page).then(() => {
+                this.findContributors(query, page).then(() => {
                     this.set('addState', 'searchView');
                 }, () => {
                     this.get('toast').error('Could not perform search query.');
@@ -198,8 +195,8 @@ export default CpPanelBodyComponent.extend( {
         },
         // Removes contributor then redraws contributor list view - removal of contributor may change
         // which additional update/remove requests are permitted.
-        removeContributor(contrib) {
-            this.attrs.removeContributor(contrib).then(() => {
+        removeContributorLocal(contrib) {
+            this.get('actions.removeContributor').call(this, contrib).then(() => {
                 this.toggleAuthorModification();
                 this.removedSelfAsAdmin(contrib, contrib.get('permission'));
                 this.get('contributors').removeObject(contrib);
@@ -213,7 +210,7 @@ export default CpPanelBodyComponent.extend( {
         // Updates contributor then redraws contributor list view - updating contributor
         // permissions may change which additional update/remove requests are permitted.
         updatePermissions(contributor, permission) {
-            this.attrs.editContributor(contributor, permission, '').then(() => {
+            this.get('actions.updateContributor').call(this, contributor, permission, '').then(() => {
                 this.toggleAuthorModification();
                 this.highlightSuccessOrFailure(contributor.id, this, 'success');
                 this.removedSelfAsAdmin(contributor, permission);
@@ -226,7 +223,7 @@ export default CpPanelBodyComponent.extend( {
         // Updates contributor then redraws contributor list view - updating contributor
         // bibliographic info may change which additional update/remove requests are permitted.
         updateBibliographic(contributor, isBibliographic) {
-            this.attrs.editContributor(contributor, '', isBibliographic).then(() => {
+            this.get('actions.updateContributor').call(this, contributor, '', isBibliographic).then(() => {
                 this.toggleAuthorModification();
                 this.highlightSuccessOrFailure(contributor.id, this, 'success');
             }, () => {
@@ -255,7 +252,7 @@ export default CpPanelBodyComponent.extend( {
             let originalOrder = this.get('contributors');
             this.set('contributors', itemModels);
             let newIndex = itemModels.indexOf(draggedContrib);
-            this.attrs.reorderContributors(draggedContrib, newIndex, itemModels).then(() => {
+            this.get('actions.reorderContributors').call(this, draggedContrib, newIndex, itemModels).then(() => {
                 this.highlightSuccessOrFailure(draggedContrib.id, this, 'success');
             }, () => {
                 this.highlightSuccessOrFailure(draggedContrib.id, this, 'error');
@@ -268,7 +265,7 @@ export default CpPanelBodyComponent.extend( {
         pageChanged(current) {
             let query = this.get('query');
             if (query) {
-                this.attrs.findContributors(query, current).then(() => {
+                this.findContributors(query, current).then(() => {
                     this.set('addState', 'searchView');
                     this.set('currentPage', current);
                 })
