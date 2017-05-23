@@ -150,6 +150,7 @@ module.exports = function(environment) {
 
   if (environment === 'stage') {
     ENV['osfHostUrl'] = 'https://staging-api.osf.io';
+    ENV['node_guid'] = '6yptj';
   }
 
 
