@@ -2,6 +2,8 @@ import Ember from 'ember';
 import CpPanelBodyComponent from 'ember-collapsible-panel/components/cp-panel-body';
 import { permissionSelector } from 'ember-osf/const/permissions';
 import NodeActionsMixin from 'ember-osf/mixins/node-actions';
+import ENV from '../../config/environment';
+
 // import Analytics from 'ember-osf/mixins/analytics';
 /**
  * @module ember-preprints
@@ -79,7 +81,7 @@ export default CpPanelBodyComponent.extend( NodeActionsMixin, {
     }),
     init(){
         this._super(...arguments);
-        this.get('store').findRecord('node', 'h4wub').then((result)=>{
+        this.get('store').findRecord('node', ENV.node_guid).then((result)=>{
             this.set('node', result);
          });
     },
