@@ -1,5 +1,6 @@
 {{#preprint-form-body}}
     {{#if isOpen}}
+    {{#unless excludeContent.license}}
             <div class='row m-b-md'>
               <div class='col-xs-12'>
                   {{license-picker currentValues=basicsLicense showCategories=false editLicense=(action 'editLicense') allowDismiss=false autosave=true showBorder=false pressSubmit=(action 'saveBasics')}}
@@ -18,21 +19,28 @@
                   </div>
               </div>
           </div>
+      {{/unless}}
+
 
             <div class="row">
-              <div class="col-md-6">
-                  <div>
-                      <label>{{t "submit.body.basics.doi.label"}}:</label>
-                      <form onchange={{action 'stripDOI'}} onsubmit={{action 'preventDefault'}}>
-                          {{validated-input model=this valuePath='basicsDOI' placeholder=(t "global.doi") value=basicsDOI pressSubmit=(action 'saveBasics')}}
-                      </form>
+                  <div class="col-md-6">
+                      {{#unless excludeContent.doi}}
+                      <div>
+                          <label>{{t "submit.body.basics.doi.label"}}:</label>
+                          <form onchange={{action 'stripDOI'}} onsubmit={{action 'preventDefault'}}>
+                              {{validated-input model=this valuePath='basicsDOI' placeholder=(t "global.doi") value=basicsDOI pressSubmit=(action 'saveBasics')}}
+                          </form>
+                      </div>
+                      {{/unless}}
+                      {{#unless excludeContent.tags}}
+                      <div class="clearfix">
+                          <label>{{t "submit.body.basics.keywords.label"}}:</label>
+                          <p class="text-smaller">{{t "submit.body.basics.keywords.paragraph"}}</p>
+                          {{tags-widget addATag=(action 'addTag') removeATag=(action 'removeTag') tags=basicsTags}}
+                      </div>
+                      {{/unless}}
                   </div>
-                  <div class="clearfix">
-                      <label>{{t "submit.body.basics.keywords.label"}}:</label>
-                      <p class="text-smaller">{{t "submit.body.basics.keywords.paragraph"}}</p>
-                      {{tags-widget addATag=(action 'addTag') removeATag=(action 'removeTag') tags=basicsTags}}
-                  </div>
-              </div>
+              {{#unless excludeContent.abstract}}
               <div class="col-md-6">
                   <label>
                       <span class="required">{{t "global.abstract"}}:</span>
@@ -41,6 +49,7 @@
                       {{validated-input model=this valuePath='basicsAbstract' placeholder=(t "submit.body.basics.abstract.placeholder") value=basicsAbstract large=true}}
                   </form>
               </div>
+              {{/unless}}
           </div>
             <div class="row">
               <div class="col-md-12">
@@ -55,28 +64,36 @@
 
 {{#if (not isOpen)}}
     {{#if basicsAbstract}}
-    <div class='row m-b-md'>
-        <div class='col-xs-12'>
-            <b>Abstract:</b>
-            <p>{{basicsAbstract}}</p>
-            <b>License:</b>
-            <p>
-                {{#if basicsLicense}}
-                    <span>{{basicsLicense.licenseType.name}}</span>
-                {{else}}
-                    <i>Not provided</i>
-                {{/if}}
-            </p>
-            <b>DOI:</b>
-            <p>{{#if basicsDOI}}{{basicsDOI}}{{else}}<i>Not provided</i>{{/if}}</p>
-            <b>Tags:</b>
-            <p>{{#if basicsTags}}
-                    {{#each basicsTags as |tag|}} <span class="subject-preview">{{tag}}</span>{{/each}}
-                {{else}}
-                    <i>Not provided</i>
-                {{/if}}
-            </p>
+        <div class='row m-b-md'>
+            <div class='col-xs-12'>
+                {{#unless excludeContent.abstract}}
+                    <b>Abstract:</b>
+                    <p>{{basicsAbstract}}</p>
+                {{/unless}}
+                {{#unless excludeContent.license}}
+                    <b>License:</b>
+                    <p>
+                        {{#if basicsLicense}}
+                            <span>{{basicsLicense.licenseType.name}}</span>
+                        {{else}}
+                            <i>Not provided</i>
+                        {{/if}}
+                    </p>
+                {{/unless}}
+                {{#unless excludeContent.doi}}
+                    <b>DOI:</b>
+                    <p>{{#if basicsDOI}}{{basicsDOI}}{{else}}<i>Not provided</i>{{/if}}</p>
+                {{/unless}}
+                {{#unless excludeContent.tags}}
+                    <b>Tags:</b>
+                    <p>{{#if basicsTags}}
+                            {{#each basicsTags as |tag|}} <span class="subject-preview">{{tag}}</span>{{/each}}
+                        {{else}}
+                            <i>Not provided</i>
+                        {{/if}}
+                    </p>
+                {{/unless}}
+            </div>
         </div>
-    </div>
-{{/if}}
+    {{/if}}
 {{/if}}

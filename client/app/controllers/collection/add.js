@@ -110,10 +110,10 @@ export default Ember.Controller.extend({
 
 
     create_widget_signature: ['widget_component', 'description',
-                                        'section', 'output_parameter', 'action_id'],
+                                        'section', 'output_parameter', 'action_id', 'options'],
     // `this` must be bound to the controller for `create_widget`, as
     // `create_widget` requires access to the controller, and does so through `this`.
-    create_widget: function(widget_component, description, section, output_parameter, action_id) {
+    create_widget: function(widget_component, description, section, output_parameter, action_id, options) {
         let action;
 
         let actions = this.get('formActions');
@@ -141,7 +141,8 @@ export default Ember.Controller.extend({
             description,
             section,
             output_parameter,
-            action
+            action,
+            options
         };
         this.get('widgets').pushObject(widget);
         return widget;

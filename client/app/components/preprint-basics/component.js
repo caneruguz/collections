@@ -43,14 +43,35 @@ function doiRegexExec(doi) {
 /* Does not support editing */
 export default Ember.Component.extend(BasicsValidations, {
     editMode: true,
-    uploadValid: Ember.computed.alias('nodeLocked'), // Once the node has been locked (happens in step one of upload section), users are free to navigate through form unrestricted
+    excludeContent: Ember.computed('excludeList', function(){
+        let list = this.get('options.excludeList');
+        return {
+            license: list.includes('license'),
+            doi: list.includes('doi'),
+            tags: list.includes('tags'),
+            abstract: list.includes('abstract')
+        }
+    }),
     abstractValid: Ember.computed.alias('validations.attrs.basicsAbstract.isValid'),
     doiValid: Ember.computed.alias('validations.attrs.basicsDOI.isValid'),
     // Must have year and copyrightHolders filled if those are required by the licenseType selected
     licenseValid: false,
 
     // Basics fields that are being validated are abstract, license and doi (title validated in upload section). If validation added for other fields, expand basicsValid definition.
-    basicsValid: Ember.computed.and('abstractValid', 'doiValid', 'licenseValid'),
+    basicsValid: Ember.computed('abstractValid', 'doiValid', 'licenseValid', function(){
+        let valid = true;
+        if(!this.get('excludeContent.abstract') && !this.get('abstractValid')){
+            valid = false;
+        }
+        if(!this.get('excludeContent.doi') && !this.get('doiValid')){
+            valid = false;
+        }
+        if(!this.get('excludeContent.license') && !this.get('licenseValid')){
+            valid = false;
+        }
+        return valid;
+    }),
+
     basicsAbstract:  Ember.computed('node.description', function() {
         let node = this.get('node');
         return node ? node.get('description') : null;

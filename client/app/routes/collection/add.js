@@ -294,6 +294,7 @@ export default Ember.Route.extend({
             submission_form_name: 'Meeting Submission Form',
             sections: [
               {name: 'upload', divId: 'preprint-form-upload', param: 'upload_section'},
+              {name: 'basic info', divId: 'preprint-form-basics', param: 'basic_info_section'},
               {name: 'authors', divId: 'preprint-form-authors', param: 'authors_section'},
               {name: 'submit', divId: 'preprint-form-submit', param: 'submit_button'}
             ],
@@ -302,6 +303,13 @@ export default Ember.Route.extend({
                     state: ['unsaved', 'editing'],
                     allowOpen: true,
                     open: true,
+                    showValidationIndicator: true,
+                    value: undefined
+                },
+                basic_info_section: {
+                    state: ['disabled'],
+                    allowOpen: true,
+                    open: false,
                     showValidationIndicator: true,
                     value: undefined
                 },
@@ -332,6 +340,10 @@ export default Ember.Route.extend({
                     value: undefined
                 },
                 authors_widget: {
+                    state: ['undefined'],
+                    value: undefined
+                },
+                basic_info_widget: {
                     state: ['undefined'],
                     value: undefined
                 },
@@ -495,6 +507,26 @@ export default Ember.Route.extend({
                     }]
                 }]
             }, {
+                type: 'create_widget',
+                args: {
+                    widget_component: 'preprint-basics',
+                    description: 'License and other things',
+                    section: 'basic info',
+                    options: {
+                        excludeList: ['license', 'doi', 'tags']                        
+                    }
+                },
+                parameters: {
+                    output_parameter: 'basic_info'
+                },
+                output_parameter: 'basic_info_widget',
+                conditions: [{
+                    all: [{
+                        parameter: 'basic_info_widget',
+                        state: 'undefined'
+                    }]
+                }]
+            },{
                 type: 'create_widget',
                 args: {
                     widget_component: 'preprint-form-authors',

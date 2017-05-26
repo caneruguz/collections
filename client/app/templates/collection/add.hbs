@@ -21,12 +21,14 @@
                             {{#preprint-form-section id=section.divId class="preprint-form-block" editMode=editMode name=section.name open=(get (get parameters section.param) 'open') allowOpen=(get (get parameters section.param) 'allowOpen') as |hasOpened isOpen|}}
                                 {{preprint-form-header name=section.name valid=true showValidationIndicator=(get (get parameters section.param) 'showValidationIndicator') isValidationActive=hasOpened}}
                                 {{#each widgets as |widget|}}
+
                                     {{#if (eq widget.section section.name)}}
                                         {{component widget.widget_component
                                             saveParameter=(action saveParameter widget.output_parameter)
                                             action=widget.action
                                             description=widget.description
                                             name=section.name
+                                            options=widget.options
                                             isOpen=isOpen
                                             closeSection=(action 'closeSection')
                                         }}
