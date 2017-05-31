@@ -44,7 +44,7 @@ function doiRegexExec(doi) {
 export default Ember.Component.extend(BasicsValidations, {
     editMode: true,
     excludeContent: Ember.computed('options.excludeList', function(){
-        let list = this.get('options.excludeList');
+        let list = this.get('options.excludeList') || [];
         return {
             license: list.includes('license'),
             doi: list.includes('doi'),
