@@ -41,7 +41,7 @@
                       {{/unless}}
                   </div>
               {{#unless excludeContent.abstract}}
-              <div class="col-md-6">
+              <div class="{{if excludeContent.doi 'col-md-12' 'col-md-6'}}">
                   <label>
                       <span class="required">{{t "global.abstract"}}:</span>
                   </label>
