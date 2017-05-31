@@ -59,17 +59,16 @@ export default Ember.Component.extend(BasicsValidations, {
 
     // Basics fields that are being validated are abstract, license and doi (title validated in upload section). If validation added for other fields, expand basicsValid definition.
     basicsValid: Ember.computed('abstractValid', 'doiValid', 'licenseValid', function(){
-        let valid = true;
         if(!this.get('excludeContent.abstract') && !this.get('abstractValid')){
-            valid = false;
+            return false;
         }
         if(!this.get('excludeContent.doi') && !this.get('doiValid')){
-            valid = false;
+            return false;
         }
         if(!this.get('excludeContent.license') && !this.get('licenseValid')){
-            valid = false;
+            return false;
         }
-        return valid;
+        return true;
     }),
 
     basicsAbstract:  Ember.computed('node.description', function() {
